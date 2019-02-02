@@ -1,0 +1,11 @@
+<template lang="">
+  <div class="index">
+    主页
+  </div>
+</template>
+<script>
+export default {
+  name: "index",
+  components: {}
+};
+</script>
