@@ -20,6 +20,7 @@
 <script>
 import InputGroup from "../components/InputGroup";
 import Button from "../components/Button";
+import jwt_decode from "jwt-decode";
 export default {
   name: "login",
   data() {
@@ -47,6 +48,21 @@ export default {
         alert("请输入合法的邮箱地址！");
         return;
       }
+      // 实现登录
+      this.$axios.post("/api/users/login", this.user).then(res => {
+        // console.log(res);
+        // 存储token
+        const { token } = res.data;
+        // 存储到ls
+        localStorage.setItem("wxToken", token);
+        // 解析
+        const decode = jwt_decode(token);
+        console.log(decode);
+        // 存储到vuex中
+        this.$store.dispatch("setUser", decode);
+        // 页面跳转
+        this.$router.push("/");
+      });
     }
   },
   components: {

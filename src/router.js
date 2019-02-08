@@ -6,14 +6,37 @@ import Register from "./views/register.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
       path: "/",
       name: "index",
-      component: Index
+      redirect: "/chats",
+      component: Index,
+      children: [
+        {
+          path: "/chats",
+          name: "chats",
+          component: () => import("./views/chats.vue")
+        },
+        {
+          path: "/contacts",
+          name: "contacts",
+          component: () => import("./views/contacts.vue")
+        },
+        {
+          path: "/discover",
+          name: "discover",
+          component: () => import("./views/discover.vue")
+        },
+        {
+          path: "/me",
+          name: "me",
+          component: () => import("./views/me.vue")
+        }
+      ]
     },
     {
       path: "/login",
@@ -27,3 +50,14 @@ export default new Router({
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  const isLogin = localStorage.wxToken ? true : false;
+  if (to.path == "/login" || to.path == "/register") {
+    next();
+  } else {
+    isLogin ? next() : next("/login");
+  }
+});
+
+export default router;

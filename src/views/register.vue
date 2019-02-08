@@ -59,6 +59,11 @@ export default {
         alert("俩次密码不一致");
         return;
       }
+      this.$axios.post("/api/users/register", this.user).then(() => {
+        // 注册成功
+        alert("注册成功");
+        this.$router.push("/login");
+      });
     }
   }
 };
